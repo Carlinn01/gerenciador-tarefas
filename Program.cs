@@ -2,6 +2,9 @@ namespace GerenciadorTarefas
 {
     class Program
     {
+        static List<Tarefa> tarefas = new List<Tarefa>();
+        static int proximoId = 1;
+
         static void Main(string[] args)
         {
             int opcao = -1;
@@ -22,6 +25,12 @@ namespace GerenciadorTarefas
 
                 switch (opcao)
                 {
+                    case 1:
+                        CadastrarTarefa();
+                        break;
+                    case 2:
+                        ListarTarefas();
+                        break;
                     case 0:
                         Console.WriteLine("Saindo...");
                         break;
@@ -29,6 +38,39 @@ namespace GerenciadorTarefas
                         Console.WriteLine("Opção inválida!");
                         break;
                 }
+            }
+        }
+
+        static void CadastrarTarefa()
+        {
+            Console.Write("Digite a descrição da tarefa: ");
+            string descricao = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(descricao))
+            {
+                Console.WriteLine("A descrição não pode ficar vazia.");
+                return;
+            }
+
+            Tarefa tarefa = new Tarefa(proximoId, descricao);
+            tarefas.Add(tarefa);
+            proximoId++;
+
+            Console.WriteLine("Tarefa cadastrada com o ID " + tarefa.Id + ".");
+        }
+
+        static void ListarTarefas()
+        {
+            if (tarefas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma tarefa cadastrada.");
+                return;
+            }
+
+            Console.WriteLine();
+            foreach (Tarefa tarefa in tarefas)
+            {
+                Console.WriteLine("ID: " + tarefa.Id + " | " + tarefa.Descricao + " | " + tarefa.Situacao());
             }
         }
     }
