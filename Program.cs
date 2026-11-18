@@ -3,6 +3,7 @@ namespace GerenciadorTarefas
     class Program
     {
         static List<Tarefa> tarefas = new List<Tarefa>();
+        static Stack<int> concluidas = new Stack<int>();
         static int proximoId = 1;
 
         static void Main(string[] args)
@@ -30,6 +31,12 @@ namespace GerenciadorTarefas
                         break;
                     case 2:
                         ListarTarefas();
+                        break;
+                    case 3:
+                        BuscarTarefa();
+                        break;
+                    case 4:
+                        ConcluirTarefa();
                         break;
                     case 0:
                         Console.WriteLine("Saindo...");
@@ -72,6 +79,60 @@ namespace GerenciadorTarefas
             {
                 Console.WriteLine("ID: " + tarefa.Id + " | " + tarefa.Descricao + " | " + tarefa.Situacao());
             }
+        }
+
+        static void BuscarTarefa()
+        {
+            Console.Write("Digite o ID da tarefa: ");
+            int id = int.Parse(Console.ReadLine());
+
+            Tarefa tarefa = ProcurarPorId(id);
+
+            if (tarefa == null)
+            {
+                Console.WriteLine("Nenhuma tarefa encontrada com o ID " + id + ".");
+                return;
+            }
+
+            Console.WriteLine("ID: " + tarefa.Id);
+            Console.WriteLine("Descrição: " + tarefa.Descricao);
+            Console.WriteLine("Situação: " + tarefa.Situacao());
+        }
+
+        static void ConcluirTarefa()
+        {
+            Console.Write("Digite o ID da tarefa: ");
+            int id = int.Parse(Console.ReadLine());
+
+            Tarefa tarefa = ProcurarPorId(id);
+
+            if (tarefa == null)
+            {
+                Console.WriteLine("Nenhuma tarefa encontrada com o ID " + id + ".");
+                return;
+            }
+
+            if (tarefa.Concluida)
+            {
+                Console.WriteLine("Essa tarefa já está concluída.");
+                return;
+            }
+
+            tarefa.Concluida = true;
+            concluidas.Push(tarefa.Id);
+
+            Console.WriteLine("Tarefa " + tarefa.Id + " concluída!");
+        }
+
+        static Tarefa ProcurarPorId(int id)
+        {
+            foreach (Tarefa tarefa in tarefas)
+            {
+                if (tarefa.Id == id)
+                    return tarefa;
+            }
+
+            return null;
         }
     }
 }
