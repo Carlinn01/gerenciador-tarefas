@@ -38,6 +38,9 @@ namespace GerenciadorTarefas
                     case 4:
                         ConcluirTarefa();
                         break;
+                    case 5:
+                        DesfazerConclusao();
+                        break;
                     case 0:
                         Console.WriteLine("Saindo...");
                         break;
@@ -122,6 +125,22 @@ namespace GerenciadorTarefas
             concluidas.Push(tarefa.Id);
 
             Console.WriteLine("Tarefa " + tarefa.Id + " concluída!");
+        }
+
+        static void DesfazerConclusao()
+        {
+            if (concluidas.Count == 0)
+            {
+                Console.WriteLine("Não há conclusão para desfazer.");
+                return;
+            }
+
+            int id = concluidas.Pop();
+            Tarefa tarefa = ProcurarPorId(id);
+
+            tarefa.Concluida = false;
+
+            Console.WriteLine("A tarefa " + tarefa.Id + " (" + tarefa.Descricao + ") voltou a ficar pendente.");
         }
 
         static Tarefa ProcurarPorId(int id)
