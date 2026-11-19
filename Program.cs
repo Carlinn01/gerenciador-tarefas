@@ -22,7 +22,12 @@ namespace GerenciadorTarefas
                 Console.WriteLine("0 - Sair");
                 Console.Write("Escolha uma opção: ");
 
-                opcao = int.Parse(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out opcao))
+                {
+                    Console.WriteLine("Opção inválida! Digite apenas números.");
+                    opcao = -1;
+                    continue;
+                }
 
                 switch (opcao)
                 {
@@ -86,8 +91,15 @@ namespace GerenciadorTarefas
 
         static void BuscarTarefa()
         {
-            Console.Write("Digite o ID da tarefa: ");
-            int id = int.Parse(Console.ReadLine());
+            if (tarefas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma tarefa cadastrada.");
+                return;
+            }
+
+            int id;
+            if (!LerId(out id))
+                return;
 
             Tarefa tarefa = ProcurarPorId(id);
 
@@ -104,8 +116,15 @@ namespace GerenciadorTarefas
 
         static void ConcluirTarefa()
         {
-            Console.Write("Digite o ID da tarefa: ");
-            int id = int.Parse(Console.ReadLine());
+            if (tarefas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma tarefa cadastrada.");
+                return;
+            }
+
+            int id;
+            if (!LerId(out id))
+                return;
 
             Tarefa tarefa = ProcurarPorId(id);
 
@@ -141,6 +160,19 @@ namespace GerenciadorTarefas
             tarefa.Concluida = false;
 
             Console.WriteLine("A tarefa " + tarefa.Id + " (" + tarefa.Descricao + ") voltou a ficar pendente.");
+        }
+
+        static bool LerId(out int id)
+        {
+            Console.Write("Digite o ID da tarefa: ");
+
+            if (!int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("ID inválido! Digite um número inteiro.");
+                return false;
+            }
+
+            return true;
         }
 
         static Tarefa ProcurarPorId(int id)
